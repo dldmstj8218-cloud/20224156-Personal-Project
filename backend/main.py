@@ -32,9 +32,22 @@ app = FastAPI(
 )
 
 # CORS - Frontend 연동
+_FRONTEND_ORIGIN = os.environ.get("FRONTEND_ORIGIN", "")
+_allowed_origins = [
+    "http://localhost:3000",
+    "http://localhost:3002",
+]
+# FRONTEND_ORIGIN 환경변수로 추가 도메인 주입 (쉼표 구분 다중 지원)
+if _FRONTEND_ORIGIN:
+    for _origin in _FRONTEND_ORIGIN.split(","):
+        _origin = _origin.strip()
+        if _origin and _origin not in _allowed_origins:
+            _allowed_origins.append(_origin)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:3002"],
+    allow_origins=_allowed_origins,
+    allow_origin_regex=r"https://.*\.vercel\.app",  # Vercel preview URL 전체 허용
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

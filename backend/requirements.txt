@@ -14,7 +14,8 @@ pillow==11.0.0
 onnxruntime>=1.16.0  # rembg 의존성 (배경 제거 모델 실행)
 
 # AI - Style recommendation (Gemini)
-google-generativeai>=0.8.0
+# google.genai (신규 SDK) 사용 - google-generativeai(구버전)와 별개 패키지
+google-genai>=1.0.0
 
 # Supabase
 supabase==2.10.0

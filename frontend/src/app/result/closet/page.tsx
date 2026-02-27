@@ -128,11 +128,13 @@ export default function ClosetResultPage() {
     fetchCoordinate(parsed);
   }, []);
 
-  /** URL만 있고 base64가 없는 아이템을 fetch해서 base64로 변환 */
+  /** URL만 있고 base64가 없는 아이템을 서버사이드 프록시 경유로 fetch → base64 변환
+   *  브라우저에서 외부 URL 직접 fetch 시 CORS 오류 방지 */
   const resolveBase64 = async (item: { image_url: string | null; image_base64: string | null }): Promise<string> => {
     if (item.image_base64) return item.image_base64;
     if (item.image_url) {
-      const res = await fetch(item.image_url);
+      const proxyUrl = `/api/image-proxy?url=${encodeURIComponent(item.image_url)}`;
+      const res = await fetch(proxyUrl);
       const blob = await res.blob();
       return await new Promise((resolve) => {
         const reader = new FileReader();

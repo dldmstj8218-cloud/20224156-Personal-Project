@@ -12,10 +12,12 @@ interface CoordinateSession {
   personal_color: string;
 }
 
+/** 외부 이미지 URL → base64 변환 (서버사이드 프록시 경유로 CORS 우회) */
 async function resolveBase64(item: { image_url?: string | null; image_base64?: string | null }): Promise<string> {
   if (item.image_base64) return item.image_base64;
   if (item.image_url) {
-    const res = await fetch(item.image_url);
+    const proxyUrl = `/api/image-proxy?url=${encodeURIComponent(item.image_url)}`;
+    const res = await fetch(proxyUrl);
     const blob = await res.blob();
     return await new Promise((resolve) => {
       const reader = new FileReader();

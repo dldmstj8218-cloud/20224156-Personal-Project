@@ -7,6 +7,14 @@ services:
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: GEMINI_API_KEY
-        sync: false
+        sync: false          # Render 대시보드에서 직접 입력
+      - key: SUPABASE_URL
+        sync: false          # Render 대시보드에서 직접 입력
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false          # Render 대시보드에서 직접 입력
+      - key: SUPABASE_STORAGE_BUCKET
+        value: wardrobe-images
+      - key: FRONTEND_ORIGIN
+        value: https://20224156-personal-projec-git-5667d3-dldmstj8218-clouds-projects.vercel.app
       - key: PYTHON_VERSION
         value: 3.11.9
