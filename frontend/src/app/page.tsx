@@ -37,10 +37,11 @@ export default function Home() {
     // 기존 "바지" 데이터를 "하의"로 마이그레이션
     const raw = localStorage.getItem("core-d-wardrobe");
     if (raw) {
-      const items = JSON.parse(raw);
-      const migrated = items.map((item: WardrobeItem) => ({
+      type RawItem = Omit<WardrobeItem, "item_type"> & { item_type: string };
+      const items: RawItem[] = JSON.parse(raw);
+      const migrated: WardrobeItem[] = items.map((item) => ({
         ...item,
-        item_type: (item.item_type as string) === "바지" ? "하의" : item.item_type,
+        item_type: (item.item_type === "바지" ? "하의" : item.item_type) as WardrobeItem["item_type"],
       }));
       localStorage.setItem("core-d-wardrobe", JSON.stringify(migrated));
     }
